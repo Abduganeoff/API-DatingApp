@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DatingApp_Backend.Data;
 using DatingApp_Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,18 +16,17 @@ namespace DatingApp_Backend.Controllers
     [Authorize(Roles ="admin")]
     public class ValuesController : ControllerBase
     {
-        private readonly s17514Context _dbContext;
+        private readonly UserDbContext _dbContext;
 
-        public ValuesController(s17514Context dbContext)
+        public ValuesController(UserDbContext dbContext)
         {
             _dbContext = dbContext;
         }
-
         
         [HttpGet]
         public IActionResult GetValues()
         {
-            var values =  _dbContext.Value.ToList();
+            var values =  _dbContext.Values.ToList();
 
             return Ok(values);
 
@@ -36,7 +36,7 @@ namespace DatingApp_Backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetValue(int id)
         {
-            var value = await _dbContext.Value.FirstOrDefaultAsync(c => c.Index == id);
+            var value = await _dbContext.Values.FirstOrDefaultAsync(c => c.Id == id);
 
             return Ok(value);
         }

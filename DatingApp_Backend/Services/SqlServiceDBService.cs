@@ -1,4 +1,6 @@
-﻿using DatingApp_Backend.Models;
+﻿using DatingApp_Backend.Data;
+using DatingApp_Backend.Helpers;
+using DatingApp_Backend.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,9 +13,9 @@ namespace DatingApp_Backend.Services
 {
     public class SqlServiceDBService : IDBService
     {
-        private readonly s17514Context _dbContex;
+        private readonly UserDbContext _dbContex;
 
-        public SqlServiceDBService(s17514Context dbContex)
+        public SqlServiceDBService(UserDbContext dbContex)
         {
             _dbContex = dbContex;
         }
@@ -23,10 +25,10 @@ namespace DatingApp_Backend.Services
             var takenUser = await _dbContex.Users.FirstOrDefaultAsync(c => c.UserName ==userName);
 
             if (takenUser == null)
-                return null;
+                throw new ExceptionHandler(ExceptionHandlerEnumType.NotFound, "The user not found");
 
             if (!VerifyPassword(password, takenUser.PasswordHash, takenUser.PasswordSalt))
-                return null;
+                throw new ExceptionHandler(ExceptionHandlerEnumType.Unauthorized, "This user unauthorized");
 
             return takenUser;
         }
