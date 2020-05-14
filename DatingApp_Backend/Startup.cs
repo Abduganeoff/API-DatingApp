@@ -1,5 +1,6 @@
 
 using System.Text;
+using AutoMapper;
 using DatingApp_Backend.Data;
 using DatingApp_Backend.Models;
 using DatingApp_Backend.Services;
@@ -28,7 +29,14 @@ namespace DatingApp_Backend
         {
             services.AddDbContext<UserDbContext>(option => option.UseSqlServer("Data Source=db-mssql;Initial Catalog=s17514;Integrated Security=True"));
             services.AddControllers();
-            services.AddTransient<IDBService, SqlServiceDBService>();
+            services.AddAutoMapper(typeof(DatingRepository).Assembly);
+            services.AddScoped<IDBService, SqlServiceDBService>();
+            services.AddScoped<IDatingRepository, DatingRepository>();
+            services.AddControllers().AddNewtonsoftJson(opt => 
+            {
+               opt.SerializerSettings.ReferenceLoopHandling =
+               Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(option =>
                {
