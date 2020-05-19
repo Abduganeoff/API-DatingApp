@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DatingApp_Backend.DTOs.Request;
 using DatingApp_Backend.DTOs.Response;
 using DatingApp_Backend.Models;
 using System;
@@ -27,6 +28,7 @@ namespace DatingApp_Backend.Helpers
                          .MapFrom(src => src.DateOfBirth.CalculateAge()));
 
             CreateMap<Photo, PhotoResponse>();
+            CreateMap<UpdateUserDetailRequest, Users>();
         }
 
     }
