@@ -11,5 +11,6 @@ namespace DatingApp_Backend.Models
         public bool IsMain { get; set; }
         public int UserId { get; set; }
         public Users User { get; set; }
+        public string PublicId { get; set; }
     }
 }

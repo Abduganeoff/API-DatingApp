@@ -26,6 +26,13 @@ namespace DatingApp_Backend.Services
             _userDb.Remove(entity);
         }
 
+        public async Task<Photo> GetPhoto(int id)
+        {
+            var photo = await _userDb.Photos.FirstOrDefaultAsync(opt => opt.Id == id);
+
+            return photo;
+        }
+
         public async Task<Users> GetUser(int id)
         {
             var userToReturn = await _userDb.Users.Include(p => p.Photos).FirstOrDefaultAsync(p => p.Id == id);

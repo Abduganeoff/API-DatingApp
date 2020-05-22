@@ -53,6 +53,7 @@ namespace DatingApp_Backend.Controllers
                 return Unauthorized();
 
             var userForUpdate = await _repo.GetUser(id);
+
             _mapper.Map(request, userForUpdate);
 
             if (await _repo.SaveAll())

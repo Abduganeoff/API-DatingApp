@@ -29,6 +29,8 @@ namespace DatingApp_Backend.Helpers
 
             CreateMap<Photo, PhotoResponse>();
             CreateMap<UpdateUserDetailRequest, Users>();
+            CreateMap<Photo, PhotoAfterUploadingResponse>();
+            CreateMap<PhotoToUploadRequest, Photo>();
         }
 
     }

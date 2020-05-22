@@ -2,6 +2,7 @@
 using System.Text;
 using AutoMapper;
 using DatingApp_Backend.Data;
+using DatingApp_Backend.Helpers;
 using DatingApp_Backend.Models;
 using DatingApp_Backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -29,6 +30,7 @@ namespace DatingApp_Backend
         {
             services.AddDbContext<UserDbContext>(option => option.UseSqlServer("Data Source=db-mssql;Initial Catalog=s17514;Integrated Security=True"));
             services.AddControllers();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddAutoMapper(typeof(DatingRepository).Assembly);
             services.AddScoped<IDBService, SqlServiceDBService>();
             services.AddScoped<IDatingRepository, DatingRepository>();
