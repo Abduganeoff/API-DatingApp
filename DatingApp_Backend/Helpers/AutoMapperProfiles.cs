@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DatingApp_Backend.DTOs;
 using DatingApp_Backend.DTOs.Request;
 using DatingApp_Backend.DTOs.Response;
 using DatingApp_Backend.Models;
@@ -31,6 +32,7 @@ namespace DatingApp_Backend.Helpers
             CreateMap<UpdateUserDetailRequest, Users>();
             CreateMap<Photo, PhotoAfterUploadingResponse>();
             CreateMap<PhotoToUploadRequest, Photo>();
+            CreateMap<RegisterRequest, Users>();
         }
 
     }

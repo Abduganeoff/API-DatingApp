@@ -43,14 +43,15 @@ namespace DatingApp_Backend.Controllers
             if (await _dbContext.UserExist(request.UserName))
                 return BadRequest($"{request.UserName} already exists");
 
-            var userToCReate = new Users
-            {
-                UserName = request.UserName
-            };
+            var userToCReate = _mapper.Map<Users>(request);
 
             var createdUser = await _dbContext.Register(userToCReate, request.Password);
 
-            return StatusCode(201);
+            var userToReturn = _mapper.Map<UserDetailedResponse>(createdUser);
+
+            return CreatedAtRoute("GetUser", 
+                                   new { Controller = "User", id = createdUser.Id }, 
+                                   userToReturn);
 
         }
 

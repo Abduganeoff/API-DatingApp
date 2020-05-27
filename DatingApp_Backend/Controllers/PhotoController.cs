@@ -135,5 +135,45 @@ namespace DatingApp_Backend.Controllers
 
         }
 
+        [HttpDelete("{id}/delete")]
+        public async Task<IActionResult> DeletePhoto(int userId, int id)
+        {
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            var userFromRepo = await _repo.GetUser(userId);
+
+            if (!userFromRepo.Photos.Any(opt => opt.Id == id))
+                return Unauthorized();
+
+            var photoFromRepo = await _repo.GetPhoto(id);
+
+            if (photoFromRepo.IsMain)
+                return BadRequest("Main photo cannot be deleted");
+
+            if(photoFromRepo.PublicId != null)
+            {
+                var deletePar = new DeletionParams(photoFromRepo.PublicId);
+
+                var result = _cloudinary.Destroy(deletePar);
+
+                if (result.Result == "ok")
+                {
+                    _repo.Delete(photoFromRepo);
+                }
+            }
+
+            if(photoFromRepo.PublicId == null)
+            {
+                _repo.Delete(photoFromRepo);
+            }
+
+            if (await _repo.SaveAll())
+                return Ok();
+
+            return BadRequest("Photo could not be deleted");
+
+        }
+
     }
 }
