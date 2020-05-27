@@ -22,7 +22,9 @@ namespace DatingApp_Backend.Services
 
         public async Task<Users> Loging(string userName, string password)
         {
-            var takenUser = await _dbContex.Users.FirstOrDefaultAsync(c => c.UserName ==userName);
+            var takenUser = await _dbContex.Users
+                                           .Include(opt => opt.Photos)
+                                           .FirstOrDefaultAsync(c => c.UserName ==userName);
 
             if (takenUser == null)
                 throw new ExceptionHandler(ExceptionHandlerEnumType.NotFound, "The user not found");

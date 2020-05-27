@@ -5,8 +5,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using DatingApp_Backend.DTOs;
 using DatingApp_Backend.DTOs.Request;
+using DatingApp_Backend.DTOs.Response;
 using DatingApp_Backend.Helpers;
 using DatingApp_Backend.Models;
 using DatingApp_Backend.Services;
@@ -23,11 +25,13 @@ namespace DatingApp_Backend.Controllers
     {
         private readonly IDBService _dbContext;
         private readonly IConfiguration _config;
+        private readonly IMapper _mapper;
 
-        public AuthenticationController(IDBService dbContext, IConfiguration config)
+        public AuthenticationController(IDBService dbContext, IConfiguration config, IMapper mapper)
         {
             _dbContext = dbContext;
             _config = config;
+            _mapper = mapper;
         }
 
         [HttpPost("reg")]
@@ -82,10 +86,12 @@ namespace DatingApp_Backend.Controllers
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
+            var user = _mapper.Map<UserDetailedResponse>(userFromLog);
 
             return Ok(new
             {
-                token = tokenHandler.WriteToken(token)
+                token = tokenHandler.WriteToken(token),
+                user
             });
 
 
